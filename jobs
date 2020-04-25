@@ -1,0 +1,29 @@
+job('maven-job-DSL-git2'){
+	description('re-create the maven job with dsl, clone a github repo , build , test run and archive the project')
+	scm{
+		github('https://github.com/nohierhassan/Maven-Jenkins.git','master', {node -> node / 'extensions' << '' })
+	}
+	steps{
+		maven{
+		mavenInstallation('maven 3.6.3')
+		goals('-B -DskipTests clean package')
+	}
+	maven{
+		mavenInstallation('maven 3.6.3')
+		goals('test')
+	}
+	shell('''
+		echo "***************"
+echo "Production"
+echo "***************"
+java -jar /var/jenkins_home/workspace/maven-job/target/my-app-1.0-SNAPSHOT.jar
+		''')
+
+	}
+	publishers{
+		archiveArtifacts('target/my-app-1.0-SNAPSHOT.jar')
+        archiveJunit('target/surefire-reports/*.xml')
+         mailer('nohierassan2@gmail.com',false,true)
+	}
+
+}
