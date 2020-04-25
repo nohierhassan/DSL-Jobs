@@ -1,7 +1,7 @@
 job('maven-job-DSL-git2'){
 	description('re-create the maven job with dsl, clone a github repo , build , test run and archive the project')
 	scm{
-		github('https://github.com/nohierhassan/Maven-Jenkins.git','master', {node -> node / 'extensions' << '' })
+		github('https://github.com/nohierhassan/Maven-Jenkins.git','master')
 	}
 	steps{
 		maven{
